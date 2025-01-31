@@ -5,8 +5,12 @@ export default function Modules() {
           <div className="wd-header">
               <button>Collapse All</button>
               <button>View Progress</button>
-              <button>Publish All</button>
-              <button>+ Module</button>
+              <select>
+          <option value="publish-now">Publish Now</option>
+          <option value="schedule">Schedule</option>
+          <option value="draft">Save as Draft</option>
+        </select>
+        <button>+ Module</button>
           </div>
           <ul id="wd-modules">
               <li className="wd-module">
