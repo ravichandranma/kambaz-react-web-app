@@ -280,6 +280,7 @@ Please
 <a href="https://www.lipsum.com" id="wd-lipsum">click here</a>
 to get dummy text<br/>
 
+<a href="https://github.com/ravichandranma/kambaz-react-web-app/tree/master" id="wd-github">click here</a> to go to github<br/>
   </div>
   );
 }
