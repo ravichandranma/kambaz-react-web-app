@@ -30,7 +30,7 @@
 // }
 
 import CourseNavigation from "./Navigation";
-import { Navigate, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";  
