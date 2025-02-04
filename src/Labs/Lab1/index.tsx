@@ -1,5 +1,7 @@
+import { Container } from "react-bootstrap";
 export default function Lab1() {
   return (
+    <Container>
     <div>
       <div id="wd-lab1">
         <h2>Lab 1</h2>
@@ -282,5 +284,6 @@ to get dummy text<br/>
 
 <a href="https://github.com/ravichandranma/kambaz-react-web-app/tree/master" id="wd-github">click here</a> to go to github<br/>
   </div>
+  </Container>
   );
 }
