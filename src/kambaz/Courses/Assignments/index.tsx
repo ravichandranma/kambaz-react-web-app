@@ -34,7 +34,7 @@ export default function Assignments() {
                   <FaRegPenToSquare className="fs-3 mt-4 text-success" />
                   <div>
                     <a className="wd-assignment-link wd-disabled-link"
-                      href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}>
+                      href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
                       {assignment.title}
                     </a>
                     <p>
