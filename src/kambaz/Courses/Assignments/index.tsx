@@ -2,7 +2,7 @@ import { BsGripVertical } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
 import AssignmentControls from "./AssignmentControls";
 import { IoEllipsisVertical } from "react-icons/io5";
-import AssignmentCOntrolButtons from "./AssignmentControlButtons";
+import AssignmentControlButtons from "./AssignmentControlButtons"; 
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import * as db from "../../Database";
@@ -34,7 +34,7 @@ export default function Assignments() {
                   <FaRegPenToSquare className="fs-3 mt-4 text-success" />
                   <div>
                     <a className="wd-assignment-link wd-disabled-link"
-                      href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
+                      href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}>
                       {assignment.title}
                     </a>
                     <p>
@@ -46,7 +46,7 @@ export default function Assignments() {
                       </span>
                     </p>
                   </div>
-                  <AssignmentCOntrolButtons />
+                  <AssignmentControlButtons /> 
                 </li>
               ))}
           </ul>

@@ -1,5 +1,5 @@
 import { AiOutlineDashboard } from "react-icons/ai";
-import { IoCalendar, IoSettingsOutline, IoCalendarOutline } from "react-icons/io5";
+import { IoCalendarOutline } from "react-icons/io5";
 import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
 import { Link, useLocation } from "react-router-dom";
 import ListGroup from 'react-bootstrap/ListGroup';
