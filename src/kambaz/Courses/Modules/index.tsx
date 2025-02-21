@@ -2,14 +2,14 @@ import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
 import ModulesControls from "./ModulesControls";
 import { BsGripVertical } from "react-icons/bs";
+import * as db from "../../Database";
 import { useParams } from "react-router";
-import modulesData from "../../Database/modules.json";
 
 export default function Modules() {
   const { cid } = useParams();
-  const modules = modulesData;
+  const modules = db.modules;
   return (
-    <div id="wd-kambaz-modules" >
+    <div id="wd-Kambaz-modules">
       <ModulesControls />
       <div>
         <ul id="wd-modules" className="list-group rounded-0 mt-5 ms-5">
@@ -18,13 +18,15 @@ export default function Modules() {
             .map((module: any) => (
               <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
                 <div className="wd-title p-3 ps-2 bg-secondary">
-                  <BsGripVertical className="me-2 fs-3" /> {module.name} <ModuleControlButtons />
+                  <BsGripVertical className="me-2 fs-3" /> {module.name}{" "}
+                  <ModuleControlButtons />
                 </div>
                 {module.lessons && (
                   <ul className="wd-lessons list-group rounded-0">
                     {module.lessons.map((lesson: any) => (
                       <li className="wd-lesson list-group-item p-3 ps-1">
-                        <BsGripVertical className="me-2 fs-3" /> {lesson.name} <LessonControlButtons />
+                        <BsGripVertical className="me-2 fs-3" /> {lesson.name}{" "}
+                        <LessonControlButtons />
                       </li>
                     ))}
                   </ul>
@@ -32,6 +34,7 @@ export default function Modules() {
               </li>
             ))}
         </ul>
-      </div></div>
+      </div>
+    </div>
   );
 }

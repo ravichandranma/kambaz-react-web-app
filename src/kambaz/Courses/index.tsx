@@ -15,9 +15,11 @@ export default function Courses() {
   return (
     <div id="wd-courses">
       <h2 className="text-danger">
-        <FaAlignJustify className="me-4 fs-4 mb-1" />{course && course.name}
+        <FaAlignJustify className="me-4 fs-4 mb-1" />
+        {course && course.name}
         {pathname.split("/")[4] && ` > ${pathname.split("/")[4]}`}
-        {pathname.split("/")[5] && ` > ${pathname.split("/")[5]}`}</h2>
+        {pathname.split("/")[5] && ` > ${pathname.split("/")[5]}`}
+      </h2>
       <hr />
       <div className="d-flex">
         <div className="d-none d-md-block">
