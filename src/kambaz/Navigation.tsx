@@ -28,7 +28,7 @@ export default function KambazNavigation() {
         action
         className="bg-black border-0 text-center"
       >
-        <img src="/images/NEU.png" width="75px" />
+        <img src="/images/NEU.jpg" width="75px" />
       </ListGroup.Item>
       <ListGroup.Item
         as={Link}
