@@ -20,7 +20,7 @@ import JsonStringify from "./JsonStringify";
 import House from "./House";
 import TodoItem from "./todos/TodoItem";
 import TodoList from "./todos/TodoList";
-import { Container } from "react-bootstrap";
+import { Container, ListGroup } from "react-bootstrap";
 import Spreading from "./Spreading";
 import Destructing from "./Destructing";
 import FunctionDestructing from "./FunctionDestructing";
@@ -32,12 +32,22 @@ import Square from "./Square";
 import Highlight from "./Highlight";
 import AddPathParameters from "./AddPathParameters";
 import PathParameters from "./PathParameters";
+import { useSelector } from "react-redux";
 export default function Lab3() {
   console.log('Hello World!');
+  const { todos } = useSelector((state: any) => state.todosReducer);
   return(
     <Container>
     <div id="wd-lab3">
       <h3>Lab 3</h3>
+      <ListGroup>
+        {todos.map((todo: any) => (
+          <ListGroup.Item key={todo.id}>
+            {todo.title}
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+      <hr />
       <VariablesAndConstants/>
       <VariableTypes/>
       <BooleanVariables/>
