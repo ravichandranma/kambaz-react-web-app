@@ -8,14 +8,13 @@ import Labs from "../Labs";
 import * as db from "./Database";
 import { useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
-import { Container } from "react-bootstrap";
 
 export default function Kambaz() {
   const [courses, setCourses] = useState<any[]>(db.courses);
   const [course, setCourse] = useState<any>({
-    _id: "0",
-    name: "New Course",
-    number: "New Number",
+    _id: "RS101",
+    name: "Rocket Science 101",
+    number: "RS4550",
     startDate: "2024-09-10",
     endDate: "2024-12-15",
     imgSource: "/images/reactjs.png",
@@ -27,7 +26,17 @@ export default function Kambaz() {
       ...course,
       _id: new Date().getTime().toString(),
     };
-    setCourses([...courses, { ...course, ...newCourse }]);
+    setCourses([...courses, newCourse]);
+
+    setCourse({
+      _id: "0",
+      name: "New Course",
+      number: "New Number",
+      startDate: "2024-09-10",
+      endDate: "2024-12-15",
+      imgSource: "/images/reactjs.png",
+      description: "New Description",
+    });
   };
 
   const deleteCourse = (courseId: string) => {
@@ -48,8 +57,7 @@ export default function Kambaz() {
   const { cid } = useParams();
   console.log(cid);
   return (
-    // <div id="wd-Kambaz" className="d-flex">
-    <Container>
+    <div id="wd-Kambaz" className="d-flex">
       <div className="d-none d-md-block">
         <KambazNavigation />
       </div>
@@ -91,7 +99,7 @@ export default function Kambaz() {
             path="/Courses/:cid/*"
             element={
               <ProtectedRoute>
-                <Courses courses ={courses} />
+                <Courses courses={courses} />
               </ProtectedRoute>
             }
           />
@@ -100,7 +108,6 @@ export default function Kambaz() {
           <Route path="/Labs" element={<Labs />} />
         </Routes>
       </div>
-      {/* </div> */}
-    </Container>
+    </div>
   );
 }
