@@ -1,47 +1,60 @@
 import { IoCloseOutline } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router";
-import * as db from "../../Database";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { addAssignment, updateAssignment } from "./reducer";
+import * as assignmentClient from "./client"; // ✅ New: client to call backend
 
 export default function Editor() {
-  const assignments = db.assignments;
-  const { aid } = useParams();
+  const { cid, aid } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleCancel = () => {
-    navigate(-1);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const isFaculty = currentUser.role === "FACULTY";
+
+  const [assignment, setAssignment] = useState(() => {
+    const existing = assignments.find((a: any) => a._id === aid);
+    return existing
+      ? { ...existing }
+      : {
+          course: cid,
+          title: "",
+          description: "",
+          points: "",
+          dueDate: "",
+          availableAfterDate: "",
+          availableUntilDate: "",
+        };
+  });
+
+  const handleEdit = () => navigate(-1);
+
+  const handleSave = async () => {
+    if (assignment._id) {
+      const updated = await assignmentClient.updateAssignment(assignment);
+      dispatch(updateAssignment(updated));
+    } else {
+      const created = await assignmentClient.createAssignment(assignment);
+      dispatch(addAssignment(created));
+    }
+    handleEdit();
   };
 
-  const handleSave = () => {
-    navigate(-1);
-  };
+  const handleCancel = () => handleEdit();
 
   const formatDateTime = (dateString: string | undefined | null): string => {
     if (!dateString) return "";
     const date = new Date(dateString);
-
-    // Format date as YYYY-MM-DDTHH:mm
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
-
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
-  const defaultAssignment = {
-    _id: "00",
-    title: "Untitled Assignment",
-    course: "00000",
-    description: "",
-    availableAfterDate: "",
-    dueDate: "",
-    availableUntilDate: "",
-    points: "100",
-  };
-  const assignment =
-    assignments.find((assignment) => assignment._id === aid) ||
-    defaultAssignment;
   return (
     <div id="wd-assignments-editor" className="ms-5 mt-3">
       <div className="row mb-3">
@@ -53,6 +66,10 @@ export default function Editor() {
             id="wd-name"
             className="form-control mt-2"
             value={assignment.title}
+            onChange={(e) =>
+              setAssignment({ ...assignment, title: e.target.value })
+            }
+            disabled={!isFaculty}
           />
         </div>
       </div>
@@ -68,9 +85,12 @@ export default function Editor() {
               className="form-control mt-2"
               cols={50}
               rows={15}
-            >
-              {assignment.description}
-            </textarea>
+              value={assignment.description}
+              onChange={(e) =>
+                setAssignment({ ...assignment, description: e.target.value })
+              }
+              disabled={!isFaculty}
+            />
           </div>
         </div>
       </div>
@@ -78,11 +98,20 @@ export default function Editor() {
       <div className="row mb-3">
         <div className="col-sm-5">
           <label htmlFor="wd-points" className="col-form-label float-end">
-            {assignment.points}
+            Points
           </label>
         </div>
         <div className="col-sm-7">
-          <input id="wd-points" className="form-control" placeholder="100" />
+          <input
+            id="wd-points"
+            className="form-control"
+            placeholder="100"
+            value={assignment.points}
+            onChange={(e) =>
+              setAssignment({ ...assignment, points: e.target.value })
+            }
+            disabled={!isFaculty}
+          />
         </div>
       </div>
 
@@ -93,7 +122,7 @@ export default function Editor() {
           </label>
         </div>
         <div className="col-sm-7">
-          <select id="wd-group" className="form-select">
+          <select id="wd-group" className="form-select" disabled={!isFaculty}>
             <option value="VAL1" selected>
               Assignments
             </option>
@@ -111,7 +140,11 @@ export default function Editor() {
           </label>
         </div>
         <div className="col-sm-7">
-          <select id="wd-display-grade-as" className="form-select">
+          <select
+            id="wd-display-grade-as"
+            className="form-select"
+            disabled={!isFaculty}
+          >
             <option value="VAL1" selected>
               Percentage
             </option>
@@ -131,43 +164,61 @@ export default function Editor() {
         <div className="col-md-7">
           <fieldset className="border p-2">
             <div>
-              <select id="wd-submission-type" className="form-select">
+              <select
+                id="wd-submission-type"
+                className="form-select"
+                disabled={!isFaculty}
+              >
                 <option value="VAL1" selected>
                   Online
                 </option>
               </select>
             </div>
             <div className="mt-4">
-              <span>
-                <b>Online Entry Options</b>
-              </span>
+              <b>Online Entry Options</b>
               <br />
               <br />
-              <input id="wd-text-entry" type="checkbox" />
+              <input id="wd-text-entry" type="checkbox" disabled={!isFaculty} />
               <label htmlFor="wd-text-entry" className="ms-1">
                 Text Entry
               </label>
               <br />
               <br />
-              <input id="wd-website-url" type="checkbox" />
+              <input
+                id="wd-website-url"
+                type="checkbox"
+                disabled={!isFaculty}
+              />
               <label htmlFor="wd-website-url" className="ms-1">
                 Website URL
               </label>
               <br />
               <br />
-              <input id="wd-media-recordings" type="checkbox" />
+              <input
+                id="wd-media-recordings"
+                type="checkbox"
+                disabled={!isFaculty}
+              />
               <label htmlFor="wd-media-recordings" className="ms-1">
                 Media Recordings
               </label>
               <br />
               <br />
-              <input id="wd-student-annotation" type="checkbox" />
+              <input
+                id="wd-student-annotation"
+                type="checkbox"
+                disabled={!isFaculty}
+              />
               <label htmlFor="wd-student-annotation" className="ms-1">
                 Student Annotation
               </label>
               <br />
               <br />
-              <input id="wd-file-upload" type="checkbox" />
+              <input
+                id="wd-file-upload"
+                type="checkbox"
+                disabled={!isFaculty}
+              />
               <label htmlFor="wd-file-upload" className="ms-1">
                 File Uploads
               </label>
@@ -186,7 +237,7 @@ export default function Editor() {
           <fieldset className="border p-2">
             <div className="wd-assign-to-input-wrapper">
               <div className="wd-assign-to-input-content">
-                Everyone <IoCloseOutline></IoCloseOutline>
+                Everyone <IoCloseOutline />
               </div>
               <label htmlFor="wd-assign-to" className="col-form-label">
                 <b>Assign to</b>
@@ -194,7 +245,7 @@ export default function Editor() {
               <input
                 id="wd-assign-to"
                 className="form-control"
-                placeholder=""
+                disabled={!isFaculty}
               />
             </div>
             <label htmlFor="wd-due-date" className="col-form-label">
@@ -205,6 +256,10 @@ export default function Editor() {
               className="form-control"
               type="datetime-local"
               value={formatDateTime(assignment.dueDate)}
+              onChange={(e) =>
+                setAssignment({ ...assignment, dueDate: e.target.value })
+              }
+              disabled={!isFaculty}
             />
             <div className="d-flex">
               <div className="me-2">
@@ -217,6 +272,13 @@ export default function Editor() {
                   type="datetime-local"
                   style={{ width: "155px" }}
                   value={formatDateTime(assignment.availableAfterDate)}
+                  onChange={(e) =>
+                    setAssignment({
+                      ...assignment,
+                      availableAfterDate: e.target.value,
+                    })
+                  }
+                  disabled={!isFaculty}
                 />
               </div>
               <div className="float-end">
@@ -229,32 +291,41 @@ export default function Editor() {
                   type="datetime-local"
                   style={{ width: "155px" }}
                   value={formatDateTime(assignment.availableUntilDate)}
+                  onChange={(e) =>
+                    setAssignment({
+                      ...assignment,
+                      availableUntilDate: e.target.value,
+                    })
+                  }
+                  disabled={!isFaculty}
                 />
               </div>
             </div>
           </fieldset>
         </div>
       </div>
-      <hr />
 
-      <div className="row mt-4">
-        <div className="col-12 d-flex justify-content-end">
-          <button
-            id="wd-cancel"
-            className="btn btn-secondary me-1"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-          <button
-            id="wd-save"
-            className="btn btn-primary btn-danger"
-            onClick={handleSave}
-          >
-            Save
-          </button>
+      <hr />
+      {isFaculty && (
+        <div className="row mt-4">
+          <div className="col-12 d-flex justify-content-end">
+            <button
+              id="wd-cancel"
+              className="btn btn-secondary me-1"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button
+              id="wd-save"
+              className="btn btn-primary btn-danger"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
